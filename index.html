@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Joaquín Palacio — Señales biomédicas &amp; ML</title>
+<style>
+  :root{
+    --bg:#0b0e14;
+    --bg-alt:#11151f;
+    --card:#141926;
+    --card-border:#232a3b;
+    --text:#e8ecf4;
+    --text-dim:#9aa5b8;
+    --text-faint:#6b7488;
+    --accent:#5eead4;
+    --accent-2:#7dd3fc;
+    --accent-soft:rgba(94,234,212,0.12);
+    --mono: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+    --sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    background:radial-gradient(1200px 600px at 80% -10%, rgba(94,234,212,0.08), transparent),
+               radial-gradient(1000px 500px at -10% 20%, rgba(125,211,252,0.06), transparent),
+               var(--bg);
+    color:var(--text);
+    font-family:var(--sans);
+    line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:980px;margin:0 auto;padding:0 24px;}
+  a{color:var(--accent-2);text-decoration:none;}
+  a:hover{text-decoration:underline;}
+
+  header.hero{padding:96px 0 64px;}
+  .eyebrow{
+    font-family:var(--mono);font-size:13px;color:var(--accent);
+    letter-spacing:0.08em;text-transform:uppercase;margin-bottom:18px;
+    display:flex;align-items:center;gap:10px;
+  }
+  .eyebrow::before{content:"";width:8px;height:8px;border-radius:50%;background:var(--accent);box-shadow:0 0 12px var(--accent);}
+  h1{font-size:clamp(32px,5vw,52px);margin:0 0 14px;letter-spacing:-0.02em;font-weight:700;}
+  h1 span{color:var(--text-dim);font-weight:500;}
+  .lede{font-size:19px;color:var(--text-dim);max-width:660px;margin:0 0 32px;}
+  .lede strong{color:var(--text);font-weight:600;}
+  .cta-row{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:40px;}
+  .btn{
+    font-family:var(--mono);font-size:14px;padding:11px 18px;border-radius:8px;
+    border:1px solid var(--card-border);display:inline-flex;align-items:center;gap:8px;
+    transition:all .15s ease;
+  }
+  .btn:hover{text-decoration:none;border-color:var(--accent);background:var(--accent-soft);}
+  .btn.primary{background:var(--accent);color:#0b0e14;border-color:var(--accent);font-weight:600;}
+  .btn.primary:hover{background:var(--accent-2);border-color:var(--accent-2);}
+  .tags{display:flex;gap:8px;flex-wrap:wrap;}
+  .tag{
+    font-family:var(--mono);font-size:12px;color:var(--text-dim);
+    border:1px solid var(--card-border);border-radius:999px;padding:5px 12px;background:var(--bg-alt);
+  }
+
+  section{padding:56px 0;border-top:1px solid var(--card-border);}
+  h2{font-size:14px;font-family:var(--mono);text-transform:uppercase;letter-spacing:0.1em;color:var(--accent);margin:0 0 8px;}
+  h3.section-title{font-size:26px;margin:0 0 32px;letter-spacing:-0.01em;}
+  .section-intro{color:var(--text-dim);max-width:680px;margin-bottom:36px;font-size:16px;}
+
+  .stack-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:20px;}
+  .stack-group h4{font-size:13px;font-family:var(--mono);color:var(--text-faint);text-transform:uppercase;letter-spacing:0.06em;margin:0 0 12px;}
+  .stack-group .tags{margin-bottom:0;}
+
+  .project{
+    background:var(--card);border:1px solid var(--card-border);border-radius:16px;
+    padding:32px;margin-bottom:24px;
+  }
+  .project-head{display:flex;justify-content:space-between;align-items:flex-start;gap:20px;flex-wrap:wrap;margin-bottom:14px;}
+  .project-title{font-size:21px;font-weight:700;margin:0 0 6px;letter-spacing:-0.01em;}
+  .project-meta{font-family:var(--mono);font-size:12.5px;color:var(--text-faint);}
+  .project-links{display:flex;gap:10px;flex-shrink:0;flex-wrap:wrap;}
+  .project-links a{font-family:var(--mono);font-size:12.5px;border:1px solid var(--card-border);padding:7px 12px;border-radius:7px;color:var(--text-dim);}
+  .project-links a:hover{color:var(--accent);border-color:var(--accent);text-decoration:none;}
+  .project-body{color:var(--text-dim);font-size:15px;margin:14px 0;}
+  .project-body p{margin:0 0 12px;}
+  .project-body strong{color:var(--text);}
+  .metrics-row{display:flex;gap:10px;flex-wrap:wrap;margin:18px 0;}
+  .metric{
+    background:var(--bg-alt);border:1px solid var(--card-border);border-radius:10px;
+    padding:12px 16px;min-width:110px;
+  }
+  .metric .val{font-family:var(--mono);font-size:20px;color:var(--accent);font-weight:700;}
+  .metric .lab{font-size:11.5px;color:var(--text-faint);margin-top:2px;}
+  .figs{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px;margin-top:18px;}
+  .figs.single{grid-template-columns:1fr;max-width:420px;}
+  .fig{background:#fff;border-radius:10px;padding:10px;border:1px solid var(--card-border);}
+  .fig img{width:100%;display:block;border-radius:4px;}
+  .fig-cap{font-size:12px;color:var(--text-faint);text-align:center;margin-top:8px;font-family:var(--mono);}
+
+  .note-inline{font-family:var(--mono);font-size:11px;color:var(--text-faint);}
+
+  .explore{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px;}
+  .explore-item{
+    border:1px dashed var(--card-border);border-radius:12px;padding:18px 20px;
+    background:var(--bg-alt);
+  }
+  .explore-item .et{font-weight:600;font-size:14.5px;margin-bottom:6px;color:var(--accent-2);}
+  .explore-item .ed{font-size:13.5px;color:var(--text-dim);}
+
+  .about-grid{display:grid;grid-template-columns:1.4fr 1fr;gap:40px;}
+  @media(max-width:720px){.about-grid{grid-template-columns:1fr;}}
+  .note{
+    background:var(--bg-alt);border:1px solid var(--card-border);border-radius:12px;padding:20px;
+    font-size:13.5px;color:var(--text-dim);
+  }
+  .note h4{margin:0 0 8px;color:var(--text);font-size:13px;font-family:var(--mono);text-transform:uppercase;letter-spacing:0.05em;}
+
+  footer{padding:56px 0 80px;text-align:center;}
+  footer .btn{margin:0 6px;}
+  .foot-note{color:var(--text-faint);font-size:13px;margin-top:24px;font-family:var(--mono);}
+
+  ::selection{background:var(--accent);color:#0b0e14;}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+
+<header class="hero">
+  <div class="eyebrow">Estudiante avanzado de Bioingeniería · UNER</div>
+  <h1>Joaquín Palacio<br><span>Señales biomédicas + Machine Learning embebido</span></h1>
+  <p class="lede">
+    Trabajo en el tramo entre una señal cruda —PPG, EMG, acelerometría— y una decisión automática
+    confiable: <strong>adquisición, filtrado analógico/digital, detección de eventos y modelos de ML
+    corriendo en hardware embebido</strong>. Acá abajo están los proyectos donde apliqué ese pipeline.
+  </p>
+  <div class="cta-row">
+    <a class="btn primary" href="mailto:joaquinpalacio28@gmail.com">✉ joaquinpalacio28@gmail.com</a>
+    <a class="btn" href="https://github.com/joacop01" target="_blank" rel="noopener">⌥ github.com/joacop01</a>
+  </div>
+  <div class="tags">
+    <span class="tag">Python · NumPy/SciPy · scikit-learn</span>
+    <span class="tag">MATLAB</span>
+    <span class="tag">C / Firmware embebido (ESP32)</span>
+    <span class="tag">Filtrado analógico y digital</span>
+    <span class="tag">HRV · LF/HF</span>
+    <span class="tag">Bioinstrumentación</span>
+  </div>
+</header>
+
+<section id="stack">
+  <h2>Stack</h2>
+  <h3 class="section-title">Herramientas que uso a diario</h3>
+  <div class="stack-grid">
+    <div class="stack-group">
+      <h4>Señal &amp; ML</h4>
+      <div class="tags">
+        <span class="tag">NumPy / SciPy</span>
+        <span class="tag">scikit-learn</span>
+        <span class="tag">FFT / STFT / CWT</span>
+        <span class="tag">EMD · wavelets</span>
+        <span class="tag">MATLAB</span>
+      </div>
+    </div>
+    <div class="stack-group">
+      <h4>Embebido</h4>
+      <div class="tags">
+        <span class="tag">C</span>
+        <span class="tag">ESP32 (ESP-IDF)</span>
+        <span class="tag">EDU-CIAA</span>
+        <span class="tag">FreeRTOS</span>
+        <span class="tag">UART / ADC / SPI</span>
+      </div>
+    </div>
+    <div class="stack-group">
+      <h4>Bioinstrumentación</h4>
+      <div class="tags">
+        <span class="tag">ECG / PPG / EMG</span>
+        <span class="tag">Amplificadores de instrumentación</span>
+        <span class="tag">IEC 60601-1</span>
+        <span class="tag">Diseño de filtros analógicos</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="projects">
+  <h2>Proyectos</h2>
+  <h3 class="section-title">Trabajos destacados</h3>
+
+  <div class="project" id="ppg">
+    <div class="project-head">
+      <div>
+        <div class="project-title">Monitor de frecuencia cardíaca y detección de somnolencia por PPG</div>
+        <div class="project-meta">ESP32 (ESP-IDF) · C · MATLAB &nbsp;—&nbsp; Electrónica Programable, Bioingeniería UNER, 2024</div>
+      </div>
+      <div class="project-links">
+        <a href="https://github.com/joacop01/Palacio-1C-2024/tree/main/firmware/projects/ProyectoFinal" target="_blank" rel="noopener">Ver código ↗</a>
+        <a href="docs/PPG-Presentacion.pdf" target="_blank" rel="noopener">Ver presentación ↗</a>
+      </div>
+    </div>
+    <div class="project-body">
+      <p>
+        Sistema embebido que lee un sensor de pulso por <strong>fotopletismografía (PPG)</strong>, calcula
+        <strong>frecuencia cardíaca (BPM)</strong> e <strong>intervalo entre latidos (IBI)</strong> en tiempo
+        real sobre un ESP32, y muestra la señal y las métricas en un display SPI. Cada latido detectado
+        se envía por UART a MATLAB, que acumula un minuto de intervalos, arma el tacograma y estima la
+        relación de bandas <strong>LF/HF</strong> —el mismo marcador que se usa para variabilidad de
+        frecuencia cardíaca (HRV)— para decidir si hay somnolencia y disparar una alarma sonora.
+      </p>
+      <p>
+        Motivado por la relación entre somnolencia y accidentes de tránsito. Incluye detección de latidos
+        con período refractario para evitar falsos positivos, filtro IIR sobre la señal cruda, y una
+        carcasa impresa en 3D para el sensor.
+      </p>
+    </div>
+    <div class="figs single">
+      <div class="fig">
+        <img src="assets/ppg-diagrama-bloques.png" alt="Diagrama en bloques del sistema PPG">
+        <div class="fig-cap">Diagrama en bloques — sensor PPG → ESP32 → display / buzzer, con MATLAB por UART</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="project" id="saps">
+    <div class="project-head">
+      <div>
+        <div class="project-title">Clasificación de golpes de boxeo con acelerometría + ML embebido</div>
+        <div class="project-meta">Python (scikit-learn) · C · EDU-CIAA &nbsp;—&nbsp; Sistemas de Adquisición y Procesamiento de Señales (SAPS), UNER, 2024</div>
+      </div>
+      <div class="project-links">
+        <a href="docs/SAPS-Informe-Final.pdf" target="_blank" rel="noopener">Ver informe final ↗</a>
+      </div>
+    </div>
+    <div class="project-body">
+      <p>
+        Pipeline completo de señal a clasificador embebido, en equipo: acelerómetro <strong>ADXL345</strong>
+        sobre un guante de boxeo, muestreado a 90&nbsp;Hz según el contenido frecuencial real del gesto
+        (&lt;30&nbsp;Hz), con ventanas de 2&nbsp;s. Se identificó y filtró ruido de línea a 50/100&nbsp;Hz,
+        se diseñaron y compararon <strong>filtros FIR e IIR</strong> sobre la señal de aceleración, y en
+        paralelo se dimensionaron <strong>filtros analógicos activos</strong> (Sallen-Key, MFB) validando su
+        respuesta simulada contra la ideal.
+      </p>
+      <p>
+        Con la señal ya filtrada se extrajeron features y se entrenó un clasificador (árbol de decisión /
+        Random Forest) para distinguir cuatro movimientos —<em>cross, hook, uppercut, guardia</em>— y se
+        exportó directamente a C para correr en <strong>inferencia sobre la EDU-CIAA</strong>. Documentamos
+        no solo el desempeño en test sino también la caída de precisión al pasar a hardware real, algo que
+        me parece más honesto (y más útil) que reportar solo el número de entrenamiento.
+        <span class="note-inline">(código del proyecto en repo privado — disponible a pedido)</span>
+      </p>
+    </div>
+    <div class="metrics-row">
+      <div class="metric"><div class="val">98.9%</div><div class="lab">accuracy en test</div></div>
+      <div class="metric"><div class="val">94%</div><div class="lab">precisión on-device</div></div>
+      <div class="metric"><div class="val">89%</div><div class="lab">sensibilidad on-device</div></div>
+      <div class="metric"><div class="val">91%</div><div class="lab">F1 on-device</div></div>
+    </div>
+    <div class="figs">
+      <div class="fig">
+        <img src="assets/saps-filtros-analogicos.png" alt="Respuesta en frecuencia de los filtros analógicos diseñados, ideal vs. simulado">
+        <div class="fig-cap">Filtros analógicos: respuesta ideal vs. simulada (Sallen-Key / MFB / orden 4)</div>
+      </div>
+      <div class="fig">
+        <img src="assets/saps-fir-iir.png" alt="Señal de aceleración contaminada vs filtrada, FIR e IIR">
+        <div class="fig-cap">Señal de aceleración: filtrado FIR vs. IIR sobre el ruido de línea</div>
+      </div>
+      <div class="fig">
+        <img src="assets/saps-confusion-matrix.png" alt="Matriz de confusión del clasificador de golpes de boxeo">
+        <div class="fig-cap">Matriz de confusión — 4 clases, set de test (accuracy 98.9%)</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="project" id="ecg">
+    <div class="project-head">
+      <div>
+        <div class="project-title">Diseño del front-end de adquisición de un ECG</div>
+        <div class="project-meta">Diseño analógico · Normativa de seguridad eléctrica &nbsp;—&nbsp; Bioingeniería, UNER</div>
+      </div>
+      <div class="project-links">
+        <a href="docs/ECG-Bitacora-TP3.docx" target="_blank" rel="noopener">Ver bitácora ↗</a>
+      </div>
+    </div>
+    <div class="project-body">
+      <p>
+        Trabajo en equipo enfocado exclusivamente en la etapa que casi nadie con perfil de software
+        toca: <strong>adquirir</strong> la señal de ECG de forma segura y sin degradarla. Análisis del
+        escenario de medición completo —amplitud de ±2&nbsp;mV, ancho espectral 0.05–150&nbsp;Hz,
+        impedancia piel-electrodo, potencial de media celda (&lt;300&nbsp;mV), ruido de línea y
+        movimiento— y diseño del sistema para cumplir <strong>IEC 60601-1</strong>: corriente de fuga
+        &lt;10&nbsp;µA y aislamiento del paciente frente a macro/microchoque.
+      </p>
+      <p>
+        Es la contraparte de bioinstrumentación de los proyectos de software: entender por qué la señal
+        llega como llega antes de decidir cómo procesarla.
+      </p>
+    </div>
+  </div>
+
+  <div class="project" id="emg">
+    <div class="project-head">
+      <div>
+        <div class="project-title">Activación muscular por EMG bajo distintos niveles de entrada en calor</div>
+        <div class="project-meta">Python · Estadística &nbsp;—&nbsp; con A. Kilgelmann y M. Gaggiamo, Fisiología y Biofísica, UNER</div>
+      </div>
+      <div class="project-links">
+        <a href="docs/EMG-Calentamiento-Paper.pdf" target="_blank" rel="noopener">Ver paper ↗</a>
+      </div>
+    </div>
+    <div class="project-body">
+      <p>
+        Estudio experimental sobre electromiografía de superficie: se registró la señal EMG del
+        pectoral mayor durante press de banco en tres grupos con distinto nivel de entrada en calor
+        (sin calentamiento / adecuado / excesivo), normalizando la carga de trabajo a partir del 1RM
+        estimado (ecuación de Epley). Se calculó la <strong>energía de la señal EMG</strong> como
+        indicador de activación muscular total y se compararon los grupos estadísticamente.
+      </p>
+      <p>
+        Un ejercicio completo de método científico aplicado a señales biomédicas: diseño experimental,
+        procesamiento de señal y comunicación de resultados con rigor.
+      </p>
+    </div>
+  </div>
+
+  <div class="project" id="tif">
+    <div class="project-head">
+      <div>
+        <div class="project-title">Análisis tiempo-frecuencia y descomposición de señales</div>
+        <div class="project-meta">MATLAB · Python &nbsp;—&nbsp; curso de posgrado</div>
+      </div>
+      <div class="project-links">
+        <a href="https://github.com/joacop01/Analisis-tiempo-frecuencia" target="_blank" rel="noopener">Ver código ↗</a>
+      </div>
+    </div>
+    <div class="project-body">
+      <p>
+        Implementación desde cero de las herramientas de DSP avanzado que suelen usarse para señales
+        biomédicas no estacionarias: <strong>STFT, transformada wavelet continua (Morlet, bump, mexican
+        hat), detección y reconstrucción de crestas, synchrosqueezing y descomposición modal empírica
+        (EMD)</strong>. Es la caja de herramientas a la que recurro cuando un filtro clásico no alcanza
+        para caracterizar una señal.
+      </p>
+    </div>
+  </div>
+
+  <div class="project" id="sam">
+    <div class="project-head">
+      <div>
+        <div class="project-title">Separación de señales multicomponente segmentando el espectrograma con SAM</div>
+        <div class="project-meta">Python · PyTorch · Segment Anything (SAM/SAM2) &nbsp;—&nbsp; exploración personal, curso de posgrado</div>
+      </div>
+      <div class="project-links">
+        <a href="https://github.com/joacop01/Analisis-tiempo-frecuencia/blob/main/sam2_0.ipynb" target="_blank" rel="noopener">Ver notebook ↗</a>
+      </div>
+    </div>
+    <div class="project-body">
+      <p>
+        Tratar la separación de una señal multicomponente como un problema de <strong>visión por
+        computadora</strong> en vez de uno clásico de tracking de crestas: cada componente (chirp) de la
+        señal deja una cresta bien definida en su espectrograma, así que probé usar <strong>SAM /
+        SAM2 (Segment Anything)</strong> para segmentar cada cresta como si fuera un objeto en una imagen,
+        agrupé los puntos de cada máscara con <strong>DBSCAN</strong> y reconstruí la señal temporal de
+        cada componente a partir de su segmento.
+      </p>
+      <p>
+        Lo validé de forma cuantitativa y no solo visual: barrido de SNR de -10 a 20&nbsp;dB con 50
+        repeticiones por punto, midiendo <strong>QRF (quality reconstruction factor)</strong> y correlación
+        de Pearson contra la señal original de cada componente.
+      </p>
+    </div>
+    <div class="figs">
+      <div class="fig">
+        <img src="assets/sam-segmentacion-chirps.png" alt="Dos componentes de una señal segmentados sobre su espectrograma con SAM">
+        <div class="fig-cap">Cada componente de la señal segmentado como un objeto separado sobre el espectrograma</div>
+      </div>
+      <div class="fig">
+        <img src="assets/sam-qrf-vs-snr.png" alt="Calidad de reconstrucción (QRF) en función del SNR">
+        <div class="fig-cap">Calidad de reconstrucción (QRF) vs. SNR, 50 repeticiones por punto</div>
+      </div>
+    </div>
+  </div>
+
+</section>
+
+<section id="explore">
+  <h2>Estudio en curso</h2>
+  <h3 class="section-title">Lo que estoy explorando por mi cuenta</h3>
+  <p class="section-intro">
+    Fuera de los trabajos formales de la carrera, vengo estudiando por mi cuenta hacia dónde se mueve el
+    procesamiento de señales cuando se combina con deep learning. Sin repos propios todavía para mostrar
+    acá, pero es la dirección en la que quiero seguir creciendo:
+  </p>
+  <div class="explore">
+    <div class="explore-item">
+      <div class="et">Autoencoders enmascarados para audio (AudioMAE)</div>
+      <div class="ed">Representaciones aprendidas a partir de reconstruir espectrogramas parcialmente ocultos, en vez de features hechas a mano.</div>
+    </div>
+    <div class="explore-item">
+      <div class="et">STFT diferenciable / aprendible (DSTFT)</div>
+      <div class="ed">Representaciones tiempo-frecuencia donde la resolución de la ventana se ajusta durante el entrenamiento en lugar de fijarse a mano.</div>
+    </div>
+    <div class="explore-item">
+      <div class="et">Fundamentos de deep learning</div>
+      <div class="ed">De backpropagation y CNNs desde cero hasta frameworks modernos (PyTorch), como base para llevar los clasificadores clásicos que ya usé hacia arquitecturas de series temporales.</div>
+    </div>
+  </div>
+</section>
+
+<section id="about">
+  <h2>Sobre mí</h2>
+  <h3 class="section-title">Contexto</h3>
+  <div class="about-grid">
+    <div class="project-body" style="font-size:16px;">
+      <p>
+        Estudiante avanzado de Bioingeniería en la <strong>Facultad de Ingeniería de la UNER</strong>. Me
+        interesa particularmente el tramo entre la señal fisiológica cruda y la decisión automática que se
+        toma a partir de ella: el filtro correcto, el detector de eventos que no se rompe con artefactos, y
+        el clasificador que sigue funcionando cuando sale del notebook y corre en hardware real.
+      </p>
+    </div>
+    <div class="note">
+      <h4>Contacto</h4>
+      <p style="margin:0 0 10px;">✉ <a href="mailto:joaquinpalacio28@gmail.com">joaquinpalacio28@gmail.com</a></p>
+      <p style="margin:0;">⌥ <a href="https://github.com/joacop01" target="_blank" rel="noopener">github.com/joacop01</a></p>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <a class="btn primary" href="mailto:joaquinpalacio28@gmail.com">Hablemos → joaquinpalacio28@gmail.com</a>
+  <div class="foot-note">Joaquín Palacio · Bioingeniería, UNER</div>
+</footer>
+
+</div>
+</body>
+</html>
