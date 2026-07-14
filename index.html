@@ -400,28 +400,26 @@
         Tratar la separación de una señal multicomponente como un problema de <strong>visión por
         computadora</strong> en vez de uno clásico de tracking de crestas: cada componente (chirp) de la
         señal deja una cresta bien definida en su espectrograma, así que probé usar <strong>SAM /
-        SAM2 (Segment Anything)</strong> para segmentar cada cresta como si fuera un objeto en una imagen,
-        agrupé los puntos de cada máscara con <strong>DBSCAN</strong> y reconstruí la señal temporal de
-        cada componente a partir de su segmento.
+        SAM2 (Segment Anything)</strong> para segmentar cada cresta como si fuera un objeto en una imagen
+        (como se ve abajo, con las dos crestas separadas correctamente). Agrupé los puntos de cada máscara
+        con <strong>DBSCAN</strong> y reconstruí la señal temporal de cada componente a partir de su
+        segmento, invirtiendo la STFT solo con esa máscara.
       </p>
       <p>
-        Lo validé de forma cuantitativa y no solo visual: barrido de SNR de -10 a 20&nbsp;dB con 50
-        repeticiones por punto, midiendo <strong>QRF (quality reconstruction factor)</strong> y correlación
-        de Pearson contra la señal original de cada componente.
+        Lo validé de forma cuantitativa y no solo visual, con el gráfico de la derecha: barrido de SNR de
+        -10 a 20&nbsp;dB, 50 repeticiones por punto, midiendo <strong>QRF (quality reconstruction
+        factor, en dB — cuanto más alto, mejor la reconstrucción)</strong> de cada componente reconstruido
+        contra el original. La calidad cae de forma gradual y consistente entre ambos componentes a medida
+        que empeora el SNR de entrada, sin colapsos abruptos, que es lo que realmente importa para saber si
+        el método generaliza y no solo "se ve bien" en un caso particular.
       </p>
     </div>
     <div class="figs">
       <div class="fig">
-        <img src="assets/sam-antes-espectrograma.png" alt="Espectrograma con dos componentes de señal superpuestos, sin segmentar">
-        <div class="fig-cap">Antes — espectrograma con dos chirps superpuestos, sin distinguir</div>
-      </div>
-      <div class="fig">
         <img src="assets/sam-despues-segmentado.png" alt="Los dos componentes de la señal segmentados y separados con SAM">
-        <div class="fig-cap">Después — cada componente segmentado y separado con SAM</div>
       </div>
       <div class="fig">
         <img src="assets/sam-qrf-vs-snr.png" alt="Calidad de reconstrucción (QRF) en función del SNR">
-        <div class="fig-cap">Calidad de reconstrucción (QRF) vs. SNR, 50 repeticiones por punto</div>
       </div>
     </div>
   </div>
