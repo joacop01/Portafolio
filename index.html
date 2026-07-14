@@ -271,6 +271,48 @@
     </div>
   </div>
 
+  <div class="project" id="cemener">
+    <div class="project-head">
+      <div>
+        <div class="project-title">Métricas de complejidad de planes IMRT/VMAT para optimizar el control de calidad en radioterapia</div>
+        <div class="project-meta">Python (pandas, SciPy) · Estadística &nbsp;—&nbsp; Práctica Profesional Supervisada, CEMENER, en curso</div>
+      </div>
+      <div class="project-links">
+        <a href="docs/CEMENER-Metricas-Complejidad-PSQA.docx" target="_blank" rel="noopener">Ver resumen ↗</a>
+      </div>
+    </div>
+    <div class="project-body">
+      <p>
+        Trabajo actual en el <strong>Centro de Medicina Nuclear y Radioterapia de Entre Ríos (CEMENER)</strong>:
+        analizar si la complejidad de un plan de radioterapia (IMRT/VMAT) predice el resultado de su control
+        de calidad específico de paciente (PSQA), para poder asignar el método de verificación según qué tan
+        exigente es cada plan en vez de aplicar siempre el mismo criterio. Sobre 274 planes tratados, extraje
+        seis métricas de complejidad del colimador multiláminas (<strong>MCS, SAS-10, PMU, recorrido de
+        hojas, recorrido máximo y reversiones de dirección</strong>) para 164 planes de próstata y cabeza y
+        cuello, y las correlacioné (Spearman, tras verificar no-normalidad con Shapiro-Wilk) contra la tasa
+        de aprobación gamma de dosimetría portal, estratificando por zona anatómica y técnica.
+      </p>
+      <p>
+        Los patrones resultaron claramente distintos entre subgrupos: el MCS predice bien en IMRT
+        (ρ&nbsp;hasta&nbsp;+0.50) pero no en VMAT, donde en cambio el recorrido de hojas y las reversiones
+        correlacionan fuerte (ρ&nbsp;hasta&nbsp;-0.72). La línea que sigue es entrenar un modelo que
+        clasifique planes por nivel de complejidad para asignar mejor los recursos de control de calidad.
+      </p>
+    </div>
+    <div class="metrics-row">
+      <div class="metric"><div class="val">274</div><div class="lab">planes analizados</div></div>
+      <div class="metric"><div class="val">164</div><div class="lab">próstata + H&amp;N</div></div>
+      <div class="metric"><div class="val">6</div><div class="lab">métricas de complejidad</div></div>
+      <div class="metric"><div class="val">-0.72</div><div class="lab">ρ máx. (Reversals, H&amp;N-VMAT)</div></div>
+    </div>
+    <div class="figs single">
+      <div class="fig">
+        <img src="assets/cemener-correlaciones.png" alt="Matriz de correlaciones de Spearman entre métricas de complejidad y GPR, por subgrupo zona-técnica">
+        <div class="fig-cap">Correlación (Spearman ρ) entre cada métrica de complejidad y el resultado de PSQA, por zona y técnica</div>
+      </div>
+    </div>
+  </div>
+
   <div class="project" id="ecg">
     <div class="project-head">
       <div>
